@@ -59,5 +59,19 @@ export const actions = {
         } catch(err){
             commit('error', err.data?.message)
         }
+    },
+    async logsDelete({commit}, id){
+        return new Promise(async (resolve, reject) => {
+            commit('loading')
+            try {
+                const {data} = await baseURL.delete('log/'+id)
+                console.log('logsDelete',data)
+                commit('success', { })
+                resolve(data)
+            } catch(err){
+                commit('error', 'Error tidak ditemukan!')
+                reject(null)
+            }
+        })
     }
 }

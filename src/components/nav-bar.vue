@@ -67,8 +67,13 @@ export default {
     this.flag = this.value.flag;
   },
   methods: {
-    ...mapActions('logs', ['logsGetAll']),
+    ...mapActions('logs', ['logsGetAll', 'logsDelete']),
     ...mapActions('auth', ['logout']),
+    async deleteLog(id, url){
+      await this.logsDelete(id)
+      this.logsGetAll()
+      this.$router.push(url)
+    },
     timeCalc(d){
       return moment(d).locale('id').fromNow()
     },
@@ -164,7 +169,7 @@ export default {
           </template>
  
           <simplebar style="max-height: 300px">
-            <router-link :to="item.log_src == 'obat' ? '/manajemen-obat' : '/dashboard' " class="text-reset notification-item" v-for="(item,idx) in log_data" :key="idx+'notif'">
+            <span style="cursor:pointer" @click="deleteLog(item.log_id, item.log_src == 'obat' ? '/manajemen-obat' : '/perawat' )" class="text-reset notification-item" v-for="(item,idx) in log_data" :key="idx+'notif'">
               <div class="media">
                 <b-row class="align-items-center w-100 mx-auto">
                   <b-col col sm="12" class="me-0 pe-0">
@@ -182,7 +187,7 @@ export default {
                   </b-col>
                 </b-row> 
               </div>
-            </router-link> 
+            </span> 
           </simplebar>
         </b-dropdown>
 
